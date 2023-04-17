@@ -1,7 +1,10 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Jesse Glick.
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Fulvio Cavarretta,
+ * Jean-Baptiste Quenot, Luca Domenico Milanesio, Renaud Bruyeron, Stephen Connolly,
+ * Tom Huybrechts, Yahoo! Inc., Manufacture Francaise des Pneumatiques Michelin,
+ * Romain Seguy
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +24,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jenkins.scm.impl.subversion;
+package hudson.scmnew.subversion;
 
 import hudson.Extension;
-import hudson.scm.SCM;
-import hudson.scmnew.SubversionSCM;
-import org.jenkinsci.plugins.workflow.steps.scm.SCMStep;
+import hudson.scmnew.SubversionSCM.External;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-/**
- * Runs Subversion using {@link SubversionSCM}.
- */
-public final class SubversionStep extends SCMStep {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-    private final String url;
+/**
+ * {@link WorkspaceUpdater} that doesn't touch working copy.
+ *
+ * @author Moisei Rabinovich
+ */
+public class NoopUpdater extends WorkspaceUpdater {
+    private static final long serialVersionUID = 1951258464864424355L;
 
     @DataBoundConstructor
-    public SubversionStep(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
+    public NoopUpdater() {
     }
 
     @Override
-    protected SCM createSCM() {
-        return new SubversionSCM(url); // TODO maybe default to UpdateWithCleanUpdater, etc.
+    public UpdateTask createTask(int workspaceFormat) {
+        return new TaskImpl();
+    }
+
+    public static class TaskImpl extends UpdateTask {
+        private static final long serialVersionUID = -5966470969352844330L;
+
+        @Override
+        public List<External> perform() throws IOException, InterruptedException {
+            return new ArrayList<>();
+        }
+
+
     }
 
     @Extension
-    public static final class DescriptorImpl extends SCMStepDescriptor {
-
-        @Override
-        public String getFunctionName() {
-            return "svn";
-        }
-
+    public static class DescriptorImpl extends WorkspaceUpdaterDescriptor {
         @Override
         public String getDisplayName() {
-            return Messages.SubversionStep_subversion();
+            return Messages.NoopUpdater_DisplayName();
         }
-
     }
 
 }

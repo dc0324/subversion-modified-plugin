@@ -25,7 +25,7 @@
 package jenkins.scm.impl.subversion;
 
 import hudson.ExtensionList;
-import hudson.scm.SubversionRepositoryStatus;
+import hudson.scmnew.SubversionRepositoryStatus;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

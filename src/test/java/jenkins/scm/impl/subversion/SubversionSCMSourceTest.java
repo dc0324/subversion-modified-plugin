@@ -2,10 +2,10 @@ package jenkins.scm.impl.subversion;
 
 import hudson.scm.RepositoryBrowser;
 import hudson.scm.SCM;
-import hudson.scm.SubversionSCM;
-import hudson.scm.browsers.WebSVN;
-import hudson.scm.subversion.CheckoutUpdater;
-import hudson.scm.subversion.WorkspaceUpdater;
+import hudson.scmnew.SubversionSCM;
+import hudson.scmnew.browsers.WebSVN;
+import hudson.scmnew.subversion.CheckoutUpdater;
+import hudson.scmnew.subversion.WorkspaceUpdater;
 import java.net.URL;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Jesse Glick.
+ * Copyright (c) 2004-2009, Sun Microsystems, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jenkins.scm.impl.subversion;
+package hudson.scmnew;
 
 import hudson.Extension;
-import hudson.scm.SCM;
-import hudson.scmnew.SubversionSCM;
-import org.jenkinsci.plugins.workflow.steps.scm.SCMStep;
-import org.kohsuke.stapler.DataBoundConstructor;
+import hudson.model.UnprotectedRootAction;
+
+import java.util.regex.Pattern;
+import java.util.UUID;
 
 /**
- * Runs Subversion using {@link SubversionSCM}.
+ * Receives the push notification of commits from repository.
+ * Opened up for untrusted access.
+ *
+ * @author Kohsuke Kawaguchi
  */
-public final class SubversionStep extends SCMStep {
-
-    private final String url;
-
-    @DataBoundConstructor
-    public SubversionStep(String url) {
-        this.url = url;
+@Extension
+public class SubversionStatus implements UnprotectedRootAction {
+    public String getDisplayName() {
+        return "Subversion";
     }
 
-    public String getUrl() {
-        return url;
+    public String getIconFileName() {
+        // TODO
+        return null;
     }
 
-    @Override
-    protected SCM createSCM() {
-        return new SubversionSCM(url); // TODO maybe default to UpdateWithCleanUpdater, etc.
+    public String getUrlName() {
+        return "subversion";
     }
 
-    @Extension
-    public static final class DescriptorImpl extends SCMStepDescriptor {
-
-        @Override
-        public String getFunctionName() {
-            return "svn";
-        }
-
-        @Override
-        public String getDisplayName() {
-            return Messages.SubversionStep_subversion();
-        }
-
+    public SubversionRepositoryStatus getDynamic(String uuid) {
+        if(UUID_PATTERN.matcher(uuid).matches())
+            return new SubversionRepositoryStatus(UUID.fromString(uuid));
+        return null;
     }
 
+    private static final Pattern UUID_PATTERN = Pattern.compile("\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12}");
 }

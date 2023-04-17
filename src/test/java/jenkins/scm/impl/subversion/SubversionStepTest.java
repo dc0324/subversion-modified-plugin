@@ -25,8 +25,8 @@ package jenkins.scm.impl.subversion;
 
 import hudson.scm.ChangeLogSet;
 import hudson.scm.SCM;
-import hudson.scm.SubversionSCM;
-import hudson.scm.SubversionTagAction;
+import hudson.scmnew.SubversionSCM;
+import hudson.scmnew.SubversionTagAction;
 import hudson.triggers.SCMTrigger;
 import java.util.Iterator;
 import java.util.List;

@@ -1,6 +1,6 @@
 package jenkins.scm.impl.subversion;
 
-import hudson.scm.SubversionSCM;
+import hudson.scmnew.SubversionSCM;
 import org.junit.After;
 import org.junit.Test;
 

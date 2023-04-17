@@ -23,10 +23,6 @@
  */
 package jenkins.scm.impl.subversion;
 
-import com.gargoylesoftware.htmlunit.html.HtmlDivision;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.FilePath;
@@ -34,9 +30,8 @@ import hudson.Launcher;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.scm.SCMRevisionState;
-import hudson.scm.SubversionRepositoryBrowser;
-import hudson.scm.browsers.WebSVN;
-import hudson.scm.subversion.CheckoutUpdater;
+import hudson.scmnew.browsers.WebSVN;
+import hudson.scmnew.subversion.CheckoutUpdater;
 import hudson.util.StreamTaskListener;
 import java.net.URL;
 import java.util.Collections;

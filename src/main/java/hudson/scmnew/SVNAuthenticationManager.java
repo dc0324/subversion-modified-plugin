@@ -1,18 +1,18 @@
 /*
  * The MIT License
- *
- * Copyright 2014 Jesse Glick.
- *
+ * 
+ * Copyright (c) 2014 schristou88
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,48 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jenkins.scm.impl.subversion;
+package hudson.scmnew;
 
-import hudson.Extension;
-import hudson.scm.SCM;
-import hudson.scmnew.SubversionSCM;
-import org.jenkinsci.plugins.workflow.steps.scm.SCMStep;
-import org.kohsuke.stapler.DataBoundConstructor;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.auth.SVNAuthentication;
+import org.tmatesoft.svn.core.internal.wc.DefaultSVNAuthenticationManager;
+import org.tmatesoft.svn.core.wc.SVNWCUtil;
+
+import java.io.File;
 
 /**
- * Runs Subversion using {@link SubversionSCM}.
+ * @author schristou88
  */
-public final class SubversionStep extends SCMStep {
+public class SVNAuthenticationManager extends DefaultSVNAuthenticationManager {
+  public SVNAuthenticationManager(File configDir, String userName, String password) {
+    super(configDir,
+          SVNWCUtil.createDefaultOptions(configDir, true).isAuthStorageEnabled(),
+          userName,
+          password);
+  }
 
-    private final String url;
-
-    @DataBoundConstructor
-    public SubversionStep(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    @Override
-    protected SCM createSCM() {
-        return new SubversionSCM(url); // TODO maybe default to UpdateWithCleanUpdater, etc.
-    }
-
-    @Extension
-    public static final class DescriptorImpl extends SCMStepDescriptor {
-
-        @Override
-        public String getFunctionName() {
-            return "svn";
-        }
-
-        @Override
-        public String getDisplayName() {
-            return Messages.SubversionStep_subversion();
-        }
-
-    }
-
+  @Override
+  @CheckForNull
+  public SVNAuthentication getFirstAuthentication(String kind, String realm, SVNURL url) throws SVNException {
+    // SVNKIT DefaultAuthenticationManager ignores any credentials that are added to the manager.
+    return super.getAuthenticationProvider().requestClientAuthentication(kind, url, realm, null, null, false);
+  }
 }

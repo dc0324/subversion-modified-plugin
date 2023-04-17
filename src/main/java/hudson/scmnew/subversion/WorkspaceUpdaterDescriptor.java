@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Jesse Glick.
+ * Copyright (c) 2010, CloudBees, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jenkins.scm.impl.subversion;
+package hudson.scmnew.subversion;
 
-import hudson.Extension;
-import hudson.scm.SCM;
-import hudson.scmnew.SubversionSCM;
-import org.jenkinsci.plugins.workflow.steps.scm.SCMStep;
-import org.kohsuke.stapler.DataBoundConstructor;
+import hudson.DescriptorExtensionList;
+import hudson.model.Descriptor;
+import jenkins.model.Jenkins;
 
 /**
- * Runs Subversion using {@link SubversionSCM}.
+ * {@link Descriptor} for {@link WorkspaceUpdater}.
+ *
+ * @author Kohsuke Kawaguchi
  */
-public final class SubversionStep extends SCMStep {
+public abstract class WorkspaceUpdaterDescriptor extends Descriptor<WorkspaceUpdater> {
 
-    private final String url;
-
-    @DataBoundConstructor
-    public SubversionStep(String url) {
-        this.url = url;
+    public static DescriptorExtensionList<WorkspaceUpdater,WorkspaceUpdaterDescriptor> all() {
+        return Jenkins.getInstance().getDescriptorList(WorkspaceUpdater.class);
     }
-
-    public String getUrl() {
-        return url;
-    }
-
-    @Override
-    protected SCM createSCM() {
-        return new SubversionSCM(url); // TODO maybe default to UpdateWithCleanUpdater, etc.
-    }
-
-    @Extension
-    public static final class DescriptorImpl extends SCMStepDescriptor {
-
-        @Override
-        public String getFunctionName() {
-            return "svn";
-        }
-
-        @Override
-        public String getDisplayName() {
-            return Messages.SubversionStep_subversion();
-        }
-
-    }
-
 }

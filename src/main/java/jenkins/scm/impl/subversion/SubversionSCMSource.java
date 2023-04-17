@@ -42,16 +42,16 @@ import hudson.Util;
 import hudson.model.Descriptor;
 import hudson.model.Item;
 import hudson.model.TaskListener;
-import hudson.scm.CredentialsSVNAuthenticationProviderImpl;
-import hudson.scm.FilterSVNAuthenticationManager;
+import hudson.scmnew.CredentialsSVNAuthenticationProviderImpl;
+import hudson.scmnew.FilterSVNAuthenticationManager;
 import hudson.scm.RepositoryBrowser;
-import hudson.scm.SubversionRepositoryBrowser;
-import hudson.scm.SubversionRepositoryStatus;
-import hudson.scm.SubversionSCM;
-import hudson.scm.subversion.SvnHelper;
-import hudson.scm.subversion.UpdateUpdater;
-import hudson.scm.subversion.WorkspaceUpdater;
-import hudson.scm.subversion.WorkspaceUpdaterDescriptor;
+import hudson.scmnew.SubversionRepositoryBrowser;
+import hudson.scmnew.SubversionRepositoryStatus;
+import hudson.scmnew.SubversionSCM;
+import hudson.scmnew.subversion.SvnHelper;
+import hudson.scmnew.subversion.UpdateUpdater;
+import hudson.scmnew.subversion.WorkspaceUpdater;
+import hudson.scmnew.subversion.WorkspaceUpdaterDescriptor;
 import hudson.security.ACL;
 import hudson.util.EditDistance;
 import hudson.util.FormValidation;
@@ -893,7 +893,7 @@ public class SubversionSCMSource extends SCMSource {
                     SVNRevision revision = getRevisionFromRemoteUrl(url);
                     if (revision != null && !revision.isValid()) {
                         return FormValidation.errorWithMarkup(
-                                hudson.scm.subversion.Messages.SubversionSCM_doCheckRemote_invalidRevision());
+                                hudson.scmnew.subversion.Messages.SubversionSCM_doCheckRemote_invalidRevision());
                     }
 
                     return FormValidation.ok();
@@ -924,20 +924,20 @@ public class SubversionSCMSource extends SCMSource {
                             String candidate = EditDistance.findNearest(head, paths);
 
                             return FormValidation.error(
-                                hudson.scm.subversion.Messages.SubversionSCM_doCheckRemote_badPathSuggest(p, head,
+                                hudson.scmnew.subversion.Messages.SubversionSCM_doCheckRemote_badPathSuggest(p, head,
                                         candidate != null ? "/" + candidate : ""));
                         }
                     }
 
                     return FormValidation.error(
-                        hudson.scm.subversion.Messages.SubversionSCM_doCheckRemote_badPath(repoPath));
+                        hudson.scmnew.subversion.Messages.SubversionSCM_doCheckRemote_badPath(repoPath));
                 } finally {
                     if (repository != null)
                         repository.closeSession();
                 }
             } catch (SVNException e) {
                 LOGGER.log(Level.INFO, "Failed to access subversion repository "+url,e);
-                String message = hudson.scm.subversion.Messages.SubversionSCM_doCheckRemote_exceptionMsg1(
+                String message = hudson.scmnew.subversion.Messages.SubversionSCM_doCheckRemote_exceptionMsg1(
                         Util.escape(url), Util.escape(e.getErrorMessage().getFullMessage()),
                         "javascript:document.getElementById('svnerror').style.display='block';"
                                 + "document.getElementById('svnerrorlink').style.display='none';"
